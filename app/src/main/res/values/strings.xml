@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Architecture Samples</string>
+    <string name="title">Title</string>
+    <string name="take_a_note">Take a note...</string>
+</resources>
