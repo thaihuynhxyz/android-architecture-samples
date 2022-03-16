@@ -15,21 +15,21 @@ import xyz.thaihuynh.android.sample.arch.model.Note
 /**
  * Represent for View
  */
-class NoteView(private val note: Note?) : Fragment(), View.OnClickListener, NoteContract.View {
+class NoteFragment(private val note: Note?) : Fragment(), View.OnClickListener, NoteContract.View {
     private lateinit var presenter: NoteContract.Presenter
 
     private lateinit var title: TextInputEditText
     private lateinit var data: TextInputEditText
 
     companion object {
-        fun newInstance(note: Note? = null) = NoteView(note)
+        fun newInstance(note: Note? = null) = NoteFragment(note)
     }
 
     // Create NoteView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflater.inflate(R.layout.note_fragment, container, false)
+    ): View? = inflater.inflate(R.layout.note_fragment, container, false)
 
     // Setup views
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -3,34 +3,30 @@ package xyz.thaihuynh.android.sample.arch.ui.notes
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import dagger.hilt.android.AndroidEntryPoint
 import xyz.thaihuynh.android.sample.arch.R
 import xyz.thaihuynh.android.sample.arch.model.Note
-import xyz.thaihuynh.android.sample.arch.model.NoteModel
 import xyz.thaihuynh.android.sample.arch.ui.note.NoteActivity
 import xyz.thaihuynh.android.sample.arch.util.DiffUtilCallBack
-import javax.inject.Inject
 
 /**
- * Represent for Controller
+ * Represent for View
  */
-@AndroidEntryPoint
-class NotesActivity : AppCompatActivity() {
+class NotesFragment : Fragment(), NotesContract.View {
 
-    private lateinit var root: View
+    private lateinit var presenter: NotesContract.Presenter
+
     private lateinit var notesRecyclerView: RecyclerView
     private val notes = mutableListOf<Note>()
     private lateinit var adapter: NotesAdapter
-
-    @Inject
-    lateinit var model: NoteModel
 
     private val startCreateForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -53,39 +49,57 @@ class NotesActivity : AppCompatActivity() {
             }
         }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.notes_activity)
-        root = findViewById(R.id.root)
-        title = "Notes"
+    companion object {
+        fun newInstance() = NotesFragment()
+    }
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.notes_fragment, container, false)
+
+    // Setup views
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         // Receive input from Controller
-        findViewById<FloatingActionButton?>(R.id.add).apply {
+        view.findViewById<FloatingActionButton?>(R.id.add).apply {
             setOnClickListener { onAddClicked() }
         }
-        notesRecyclerView = findViewById(R.id.notes)
+        notesRecyclerView = view.findViewById(R.id.notes)
         initRecyclerView()
     }
 
     override fun onResume() {
         super.onResume()
-        model.readNotes {
-            val diffResult = DiffUtil.calculateDiff(DiffUtilCallBack(notes, it))
-            notes.clear()
-            notes.addAll(it)
-            diffResult.dispatchUpdatesTo(adapter)
-        }
+        presenter.start()
+    }
+
+    override fun showNotes(notes: List<Note>) {
+        val diffResult = DiffUtil.calculateDiff(DiffUtilCallBack(this.notes, notes))
+        this.notes.clear()
+        this.notes.addAll(notes)
+        diffResult.dispatchUpdatesTo(adapter)
+    }
+
+    override fun deleteNote(note: Note) {
+        val position = notes.indexOf(note)
+        notes.removeAt(position)
+        adapter.notifyItemRemoved(position)
+    }
+
+    override fun showNoNoteToDelete() {
+        Snackbar.make(requireView(), "204", Snackbar.LENGTH_SHORT).show()
     }
 
     private fun initRecyclerView() {
-        notesRecyclerView.layoutManager = LinearLayoutManager(this)
+        notesRecyclerView.layoutManager = LinearLayoutManager(context)
         adapter = NotesAdapter(
             notes,
             ::onNoteSelected,
         )
         notesRecyclerView.adapter = adapter
 
-        val dividerItemDecoration = DividerItemDecoration(this, RecyclerView.VERTICAL)
+        val dividerItemDecoration = DividerItemDecoration(context, RecyclerView.VERTICAL)
         notesRecyclerView.addItemDecoration(dividerItemDecoration)
 
         val simpleItemTouchCallback = object : ItemTouchHelper.SimpleCallback(
@@ -110,23 +124,21 @@ class NotesActivity : AppCompatActivity() {
     }
 
     private fun onAddClicked() {
-        startCreateForResult.launch(Intent(this, NoteActivity::class.java))
+        startCreateForResult.launch(Intent(context, NoteActivity::class.java))
     }
 
     private fun onNoteSelected(note: Note) {
-        startUpdateForResult.launch(Intent(this, NoteActivity::class.java).apply {
+        startUpdateForResult.launch(Intent(context, NoteActivity::class.java).apply {
             putExtra("note", note)
         })
     }
 
     private fun onNoteItemDelete(note: Note) {
-        model.deleteNote(note) {
-            if (it == null) {
-                Snackbar.make(root, "204", Snackbar.LENGTH_SHORT).show()
-            }
-            val position = notes.indexOf(note)
-            notes.removeAt(position)
-            adapter.notifyItemRemoved(position)
-        }
+        presenter.deleteNote(note)
+    }
+
+    override fun setPresenter(presenter: NotesContract.Presenter) {
+        this.presenter = presenter
     }
 }
+

@@ -3,15 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/cupertino/res/layout/note_item.xml" value="0.1703125" />
         <entry key="app/src/main/res/layout/main_activity.xml" value="0.20277777777777778" />
         <entry key="app/src/main/res/layout/main_fragment.xml" value="0.25253292806484295" />
         <entry key="app/src/main/res/layout/note_activity.xml" value="0.20277777777777778" />
         <entry key="app/src/main/res/layout/note_fragment.xml" value="0.25253292806484295" />
         <entry key="app/src/main/res/layout/notes_activity.xml" value="0.33177083333333335" />
+        <entry key="app/src/mvc/res/layout/note_activity.xml" value="0.1" />
         <entry key="app/src/mvc/res/layout/notes_activity.xml" value="0.25253292806484295" />
+        <entry key="app/src/mvp/res/layout/note_activity.xml" value="0.1703125" />
         <entry key="app/src/mvp/res/layout/note_fragment.xml" value="0.1793478260869565" />
         <entry key="app/src/mvp/res/layout/notes_activity.xml" value="0.14387031408308004" />
         <entry key="app/src/mvp/res/layout/notes_fragment.xml" value="0.1703125" />
+        <entry key="app/src/mvpCupertino/res/layout/note_activity.xml" value="0.1703125" />
+        <entry key="app/src/mvpMaterial/res/layout/note_activity.xml" value="0.1703125" />
       </map>
     </option>
   </component>

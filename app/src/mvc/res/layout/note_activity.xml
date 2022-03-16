@@ -5,12 +5,12 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="xyz.thaihuynh.android.sample.arch.ui.note.NoteView">
+    tools:context="xyz.thaihuynh.android.sample.arch.ui.note.NoteActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="xyz.thaihuynh.android.sample.arch.ui.note.NoteView"
+        tools:context="xyz.thaihuynh.android.sample.arch.ui.note.NoteFragment"
         android:padding="16dp">
 
         <com.google.android.material.textfield.TextInputEditText

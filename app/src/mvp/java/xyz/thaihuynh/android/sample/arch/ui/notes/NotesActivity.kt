@@ -19,10 +19,10 @@ class NotesActivity : AppCompatActivity() {
         title = "Notes"
 
         var notesFragment =
-            supportFragmentManager.findFragmentById(R.id.container) as NotesView?
+            supportFragmentManager.findFragmentById(R.id.container) as NotesFragment?
         if (notesFragment == null) {
             // Create the fragment
-            notesFragment = NotesView.newInstance()
+            notesFragment = NotesFragment.newInstance()
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, notesFragment)
                 .commitNow()

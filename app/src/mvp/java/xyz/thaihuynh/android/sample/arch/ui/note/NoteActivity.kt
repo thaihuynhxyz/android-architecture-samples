@@ -17,14 +17,14 @@ class NoteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.note_activity)
-        setTitle("Note")
+        title = "Note"
 
         val note = intent.getParcelableExtra<Note>("note")
         var noteView =
-            supportFragmentManager.findFragmentById(R.id.container) as NoteView?
+            supportFragmentManager.findFragmentById(R.id.container) as NoteFragment?
         if (noteView == null) {
             // Create the fragment
-            noteView = NoteView.newInstance(note)
+            noteView = NoteFragment.newInstance(note)
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, noteView)
                 .commitNow()
